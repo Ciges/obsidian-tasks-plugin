@@ -21372,9 +21372,22 @@ function yU(n) {
         },
     };
 }
+let _taskUiAllStrings = null;
+let _taskUiStrings = null;
+function _ui(key, fallback) {
+    if (!_taskUiAllStrings) return fallback !== undefined ? fallback : key;
+    if (!_taskUiStrings) {
+        const lang = typeof RO === "function" ? RO() : "en";
+        _taskUiStrings = _taskUiAllStrings[lang] || _taskUiAllStrings["en"] || {};
+    }
+    const parts = key.split(".");
+    let v = _taskUiStrings;
+    for (const p of parts) v = v != null ? v[p] : undefined;
+    return v !== undefined ? v : (fallback !== undefined ? fallback : key);
+}
 function bU(n) {
     let t,
-        e = Wt(n[3], n[5]) + "",
+        e = Wt(_ui("dateLabels." + n[3], n[3]), n[5]) + "",
         r,
         i,
         s,
@@ -21398,7 +21411,7 @@ function bU(n) {
                 W(i, "id", n[3]),
                 W(i, "type", "text"),
                 W(i, "class", "tasks-modal-date-input"),
-                W(i, "placeholder", TU),
+                W(i, "placeholder", _ui("datePlaceholder", TU)),
                 W(i, "accesskey", n[5]),
                 bi(i, "tasks-modal-error", !n[1]);
         },
@@ -21414,7 +21427,7 @@ function bU(n) {
                 o || ((l = Ie(i, "input", n[9])), (o = !0));
         },
         p(f, [p]) {
-            p & 40 && e !== (e = Wt(f[3], f[5]) + "") && (t.innerHTML = e),
+            p & 40 && e !== (e = Wt(_ui("dateLabels." + f[3], f[3]), f[5]) + "") && (t.innerHTML = e),
                 p & 8 && W(t, "for", f[3]),
                 p & 8 && W(i, "id", f[3]),
                 p & 32 && W(i, "accesskey", f[5]),
@@ -23114,7 +23127,7 @@ var Vc = class n {
     }
     parseAndValidateRecurrence() {
         var e;
-        if (!this.recurrenceRule) return { parsedRecurrence: "<i>not recurring</>", isRecurrenceValid: !0 };
+        if (!this.recurrenceRule) return { parsedRecurrence: `<i>${_ui("notRecurring", "not recurring")}</>`, isRecurrenceValid: !0 };
         let t =
             (e = mi.fromText({
                 recurrenceRuleText: this.recurrenceRule,
@@ -23292,7 +23305,7 @@ function rq(n) {
     for (let l = 0; l < a.length; l += 1) o[l] = SE(wE(n, a, l));
     return {
         c() {
-            (t = re("label")), (e = je("Priority")), (i = he());
+            (t = re("label")), (e = je(_ui("priority", "Priority"))), (i = he());
             for (let l = 0; l < o.length; l += 1) o[l].c();
             (s = qr()), W(t, "for", (r = "priority-" + n[0])), W(t, "id", "priority");
         },
@@ -23326,12 +23339,12 @@ function iq(n, t, e) {
         { withAccessKeys: s } = t,
         { prioritySymbols: a } = In.tasksPluginEmoji.taskSerializer.symbols,
         o = [
-            { value: "lowest", label: "Lowest", symbol: a.Lowest, accessKey: "o", accessKeyIndex: 1 },
-            { value: "low", label: "Low", symbol: a.Low, accessKey: "l", accessKeyIndex: 0 },
-            { value: "none", label: "Normal", symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
-            { value: "medium", label: "Medium", symbol: a.Medium, accessKey: "m", accessKeyIndex: 0 },
-            { value: "high", label: "High", symbol: a.High, accessKey: "h", accessKeyIndex: 0 },
-            { value: "highest", label: "Highest", symbol: a.Highest, accessKey: "i", accessKeyIndex: 1 },
+            { value: "lowest", label: _ui("priorityOptions.lowest", "Lowest"), symbol: a.Lowest, accessKey: "o", accessKeyIndex: 1 },
+            { value: "low", label: _ui("priorityOptions.low", "Low"), symbol: a.Low, accessKey: "l", accessKeyIndex: 0 },
+            { value: "none", label: _ui("priorityOptions.normal", "Normal"), symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
+            { value: "medium", label: _ui("priorityOptions.medium", "Medium"), symbol: a.Medium, accessKey: "m", accessKeyIndex: 0 },
+            { value: "high", label: _ui("priorityOptions.high", "High"), symbol: a.High, accessKey: "h", accessKeyIndex: 0 },
+            { value: "highest", label: _ui("priorityOptions.highest", "Highest"), symbol: a.Highest, accessKey: "i", accessKeyIndex: 1 },
         ],
         l = [[]];
     function u() {
@@ -23356,7 +23369,7 @@ var Ly = class extends Qt {
 dt();
 function sq(n) {
     let t,
-        e = Wt("Recurs", n[2]) + "",
+        e = Wt(_ui("recurs", "Recurs"), n[2]) + "",
         r,
         i,
         s,
@@ -23380,7 +23393,7 @@ function sq(n) {
                 W(i, "id", "recurrence"),
                 W(i, "type", "text"),
                 W(i, "class", "tasks-modal-date-input"),
-                W(i, "placeholder", "Try 'every day when done'"),
+                W(i, "placeholder", _ui("recurrencePlaceholder", "Try 'every day when done'")),
                 W(i, "accesskey", n[2]),
                 bi(i, "tasks-modal-error", !n[1]),
                 (u.a = null),
@@ -23400,7 +23413,7 @@ function sq(n) {
                 c || ((d = Ie(i, "input", n[5])), (c = !0));
         },
         p(f, [p]) {
-            p & 4 && e !== (e = Wt("Recurs", f[2]) + "") && (t.innerHTML = e),
+            p & 4 && e !== (e = Wt(_ui("recurs", "Recurs"), f[2]) + "") && (t.innerHTML = e),
                 p & 4 && W(i, "accesskey", f[2]),
                 p & 1 && i.value !== f[0].recurrenceRule && Tn(i, f[0].recurrenceRule),
                 p & 2 && bi(i, "tasks-modal-error", !f[1]),
@@ -23484,7 +23497,7 @@ function xE(n) {
 }
 function oq(n) {
     let t,
-        e = Wt("Status", n[1]) + "",
+        e = Wt(_ui("status", "Status"), n[1]) + "",
         r,
         i,
         s,
@@ -23509,7 +23522,7 @@ function oq(n) {
             Ty(i, n[2], !0), s || ((a = [Ie(i, "change", n[6]), Ie(i, "change", n[3])]), (s = !0));
         },
         p(u, [c]) {
-            if ((c & 2 && e !== (e = Wt("Status", u[1]) + "") && (t.innerHTML = e), c & 1)) {
+            if ((c & 2 && e !== (e = Wt(_ui("status", "Status"), u[1]) + "") && (t.innerHTML = e), c & 1)) {
                 o = u[0];
                 let d;
                 for (d = 0; d < o.length; d += 1) {
@@ -23774,7 +23787,7 @@ function NE(n) {
 function IE(n) {
     let t,
         e,
-        r = Wt("Only future dates:", n[16]("f")) + "",
+        r = Wt(_ui("onlyFutureDates", "Only future dates:"), n[16]("f")) + "",
         i,
         s,
         a,
@@ -23804,7 +23817,7 @@ function IE(n) {
                 o || ((l = Ie(s, "change", n[40])), (o = !0));
         },
         p(u, c) {
-            c[0] & 65536 && r !== (r = Wt("Only future dates:", u[16]("f")) + "") && (e.innerHTML = r),
+            c[0] & 65536 && r !== (r = Wt(_ui("onlyFutureDates", "Only future dates:"), u[16]("f")) + "") && (e.innerHTML = r),
                 c[0] & 65536 && a !== (a = u[16]("f")) && W(s, "accesskey", a),
                 c[0] & 8 && (s.checked = u[3].forwardOnly);
         },
@@ -24158,7 +24171,7 @@ function dq(n) {
     let t,
         e,
         r,
-        i = Wt("Description", n[16]("t")) + "",
+        i = Wt(_ui("description", "Description"), n[16]("t")) + "",
         s,
         a,
         o,
@@ -24247,14 +24260,14 @@ function dq(n) {
                 (Pe = he()),
                 (K = re("section")),
                 (B = re("button")),
-                (P = je("Apply")),
+                (P = je(_ui("apply", "Apply"))),
                 (H = he()),
                 (se = re("button")),
-                (se.textContent = "Cancel"),
+                (se.textContent = _ui("cancel", "Cancel")),
                 W(r, "for", "description"),
                 W(a, "id", "description"),
                 W(a, "class", "tasks-modal-description"),
-                W(a, "placeholder", "Take out the trash"),
+                W(a, "placeholder", _ui("descriptionPlaceholder", "Take out the trash")),
                 W(a, "accesskey", (o = n[16]("t"))),
                 W(e, "class", "tasks-modal-description-section"),
                 W(c, "class", "tasks-modal-dates-section"),
@@ -24324,7 +24337,7 @@ function dq(n) {
                     (T = !0));
         },
         p(F, Ye) {
-            (!m || Ye[0] & 65536) && i !== (i = Wt("Description", F[16]("t")) + "") && (r.innerHTML = i),
+            (!m || Ye[0] & 65536) && i !== (i = Wt(_ui("description", "Description"), F[16]("t")) + "") && (r.innerHTML = i),
                 (!m || (Ye[0] & 65536 && o !== (o = F[16]("t")))) && W(a, "accesskey", o),
                 Ye[0] & 8 && Tn(a, F[3].description),
                 F[15].priority
@@ -24749,10 +24762,10 @@ function pq(n) {
             (r = he()),
                 (i = re("div")),
                 (s = re("button")),
-                (s.textContent = "Apply"),
+                (s.textContent = _ui("apply", "Apply")),
                 (a = he()),
                 (o = re("button")),
-                (o.textContent = "Cancel"),
+                (o.textContent = _ui("cancel", "Cancel")),
                 W(e, "class", "tasks-options-modal-checkboxes"),
                 W(s, "type", "button"),
                 W(s, "class", "mod-cta"),
@@ -24858,7 +24871,7 @@ var Yi = class extends ZE.Modal {
             });
     }
     onOpen() {
-        this.titleEl.setText("Create or edit Task"), this.modalEl.addClass("tasks-edit-modal-container");
+        this.titleEl.setText(_ui("title", "Create or edit Task")), this.modalEl.addClass("tasks-edit-modal-container");
         let t = document.createElement("button");
         t.addClasses(["modal-close-button", "mod-raised", "clickable-icon"]),
             t.addClass("modal-option-button"),
@@ -33819,6 +33832,13 @@ var bf = class extends Tf.Plugin {
     }
     onload() {
         return A(this, null, function* () {
+            try {
+                _taskUiAllStrings = JSON.parse(
+                    yield this.app.vault.adapter.read(
+                        ".obsidian/plugins/obsidian-tasks-plugin/ui-strings.json"
+                    )
+                );
+            } catch (e) {}
             yield gT(),
                 fn.registerConsoleLogger(),
                 fy("info", O.t("main.loadingPlugin", { name: this.manifest.name, version: this.manifest.version })),

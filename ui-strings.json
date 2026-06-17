@@ -1,0 +1,58 @@
+{
+    "en": {
+        "title": "Create or edit Task",
+        "description": "Description",
+        "descriptionPlaceholder": "Take out the trash",
+        "priority": "Priority",
+        "priorityOptions": {
+            "lowest": "Lowest",
+            "low": "Low",
+            "normal": "Normal",
+            "medium": "Medium",
+            "high": "High",
+            "highest": "Highest"
+        },
+        "recurs": "Recurs",
+        "recurrencePlaceholder": "Try 'every day when done'",
+        "dateLabels": {
+            "due": "Due",
+            "scheduled": "Scheduled",
+            "start": "Start",
+            "done": "Done"
+        },
+        "notRecurring": "not recurring",
+        "datePlaceholder": "Try 'Mon' or 'tm' then space",
+        "onlyFutureDates": "Only future dates:",
+        "status": "Status",
+        "apply": "Apply",
+        "cancel": "Cancel"
+    },
+    "es": {
+        "title": "Crear o editar tarea",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Saca la basura",
+        "priority": "Prioridad",
+        "priorityOptions": {
+            "lowest": "Mínima",
+            "low": "Baja",
+            "normal": "Normal",
+            "medium": "Media",
+            "high": "Alta",
+            "highest": "Máxima"
+        },
+        "recurs": "Se repite",
+        "recurrencePlaceholder": "Prueba 'every day when done'",
+        "dateLabels": {
+            "due": "Vencimiento",
+            "scheduled": "Programada",
+            "start": "Inicio",
+            "done": "Finalización"
+        },
+        "notRecurring": "no repetitiva",
+        "datePlaceholder": "Escribe 'lun' o 'tm' y espacio",
+        "onlyFutureDates": "Solo fechas futuras:",
+        "status": "Estado",
+        "apply": "Aplicar",
+        "cancel": "Cancelar"
+    }
+}
