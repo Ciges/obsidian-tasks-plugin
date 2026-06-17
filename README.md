@@ -1,7 +1,10 @@
-# Fork de Obsidian Tasks
+# Obsidian Tasks Fork
 
-Versión de Obsidian Tasks: **8.2.1**
+Original Obsidian Tasks version: **8.2.1**
 
-Copia local del plugin de [Obsidian Tasks](https://github.com/obsidian-tasks-group/obsidian-tasks) (ficheros finales, no el código fuente) para hacer tu propia versión modificando el JavaScript
+Local fork of the [Obsidian Tasks](https://github.com/obsidian-tasks-group/obsidian-tasks) plugin (built files, not source code) to create a custom version. Made by modifying the JavaScript code.
 
-La hiciste el Miércoles 17 de Junio del 2026, cogiendo como base la versión 8.2.1 del plugin de Obsidian [Obsidian Tasks](https://github.com/obsidian-tasks-group/obsidian-tasks)
+The following evolutions have been made:
+- Task user interface is now in English and Spanish, with strings in separate json file
+- A link to the note of the task is added
+
