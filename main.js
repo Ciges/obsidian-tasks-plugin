@@ -17793,6 +17793,7 @@ var In,
         }),
             (uy = {
                 presets: aD,
+                uiLanguage: "es",
                 globalQuery: "",
                 globalFilter: "",
                 removeGlobalFilter: !1,
@@ -21377,8 +21378,8 @@ let _taskUiStrings = null;
 function _ui(key, fallback) {
     if (!_taskUiAllStrings) return fallback !== undefined ? fallback : key;
     if (!_taskUiStrings) {
-        const lang = typeof RO === "function" ? RO() : "en";
-        _taskUiStrings = _taskUiAllStrings[lang] || _taskUiAllStrings["en"] || {};
+        const stored = typeof X === "function" ? (X().uiLanguage || "es") : "es";
+        _taskUiStrings = _taskUiAllStrings[stored] || _taskUiAllStrings["es"] || {};
     }
     const parts = key.split(".");
     let v = _taskUiStrings;
@@ -33005,6 +33006,20 @@ var at = class at extends me.PluginSettingTab {
         e.empty(),
             this.containerEl.addClass("tasks-settings"),
             new me.Setting(e)
+                .setName("Plugin language / Idioma del plugin")
+                .setDesc("Language for the task edit modal (Spanish by default)")
+                .addDropdown((c) => {
+                    c.addOption("es", "Español");
+                    c.addOption("en", "English");
+                    c.setValue(X().uiLanguage || "es").onChange((d) =>
+                        A(this, null, function* () {
+                            it({ uiLanguage: d }),
+                                (_taskUiStrings = null),
+                                yield this.plugin.saveSettings();
+                        })
+                    );
+                }),
+            new me.Setting(e)
                 .setName(O.t("settings.format.name"))
                 .setDesc(
                     at.createFragmentWithHTML(
@@ -33860,10 +33875,10 @@ var bf = class extends Tf.Plugin {
             try {
                 _taskUiAllStrings = JSON.parse(
                     yield this.app.vault.adapter.read(
-                        ".obsidian/plugins/obsidian-tasks-plugin/ui-strings.json"
+                        this.manifest.dir + "/ui-strings.json"
                     )
                 );
-            } catch (e) {}
+            } catch (e) { console.error("Tasks plugin: failed to load ui-strings.json", e); }
             yield gT(),
                 fn.registerConsoleLogger(),
                 fy("info", O.t("main.loadingPlugin", { name: this.manifest.name, version: this.manifest.version })),
