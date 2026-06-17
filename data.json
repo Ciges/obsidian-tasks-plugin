@@ -1,0 +1,147 @@
+{
+  "presets": {
+    "this_file": "path includes {{query.file.path}}",
+    "this_folder": "folder includes {{query.file.folder}}",
+    "this_folder_only": "filter by function task.file.folder === query.file.folder",
+    "this_root": "root includes {{query.file.root}}",
+    "hide_date_fields": "# Hide any values for all date fields\nhide due date\nhide scheduled date\nhide start date\nhide created date\nhide done date\nhide cancelled date",
+    "hide_non_date_fields": "# Hide all the non-date fields, but not tags\nhide id\nhide depends on\nhide recurrence rule\nhide on completion\nhide priority",
+    "hide_query_elements": "# Hide postpone, edit and backinks\nhide postpone button\nhide edit button\nhide backlinks",
+    "hide_everything": "# Hide everything except description and any tags\npreset hide_date_fields\npreset hide_non_date_fields\npreset hide_query_elements",
+    "tareas_de_hoy": "# Tareas con fecha de hoy (o ya pasadas) PENDIENTES\nnot done\n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Formaciones\npath does not include Notas/Hogar/Despensa\n(due today) OR (scheduled today) OR (due before today) OR (scheduled before today)\ngroup by priority\nshow tree\nhide backlink\nhide task count\nhide toolbar",
+    "tareas_de_esta_nota": "# Tareas definidas en esta nota PENDIENTES\nnot done \n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Formaciones\npath does not include Notas/Hogar/Despensa\npath includes {{query.file.path}}\nshow tree\nhide backlink\nhide task count\nhide toolbar",
+    "tareas_de_esta_nota_todas": "# Tareas definidas en esta nota PENDIENTES \n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Formaciones\npath does not include Notas/Hogar/Despensa\npath includes {{query.file.path}}\nshow tree\nhide backlink\nhide task count\nhide toolbar"
+  },
+  "globalQuery": "((tags include #task) OR (tags include #question) OR (tags include #conversación) OR (tags include #email) OR (tags include #conclusión)) OR (path includes Notas/Hogar/Despensa)",
+  "globalFilter": "",
+  "removeGlobalFilter": true,
+  "taskFormat": "dataview",
+  "setCreatedDate": false,
+  "setDoneDate": true,
+  "setCancelledDate": false,
+  "autoSuggestInEditor": true,
+  "autoSuggestMinMatch": 0,
+  "autoSuggestMaxItems": 6,
+  "provideAccessKeys": true,
+  "useFilenameAsScheduledDate": false,
+  "filenameAsScheduledDateFormat": "YYYY-MM-DD",
+  "filenameAsDateFolders": [],
+  "recurrenceOnNextLine": false,
+  "removeScheduledDateOnRecurrence": false,
+  "searchResults": {
+    "taskCountLocation": "bottom"
+  },
+  "statusSettings": {
+    "coreStatuses": [
+      {
+        "symbol": " ",
+        "name": "Todo",
+        "nextStatusSymbol": "/",
+        "availableAsCommand": true,
+        "type": "TODO"
+      },
+      {
+        "symbol": "x",
+        "name": "Done",
+        "nextStatusSymbol": "-",
+        "availableAsCommand": true,
+        "type": "DONE"
+      }
+    ],
+    "customStatuses": [
+      {
+        "symbol": " ",
+        "name": "TODO",
+        "nextStatusSymbol": "/",
+        "availableAsCommand": false,
+        "type": "TODO"
+      },
+      {
+        "symbol": "/",
+        "name": "In Progress",
+        "nextStatusSymbol": "p",
+        "availableAsCommand": false,
+        "type": "IN_PROGRESS"
+      },
+      {
+        "symbol": "p",
+        "name": "OK",
+        "nextStatusSymbol": "c",
+        "availableAsCommand": false,
+        "type": "DONE"
+      },
+      {
+        "symbol": "c",
+        "name": "KO",
+        "nextStatusSymbol": "x",
+        "availableAsCommand": false,
+        "type": "DONE"
+      },
+      {
+        "symbol": "x",
+        "name": "Done",
+        "nextStatusSymbol": "-",
+        "availableAsCommand": false,
+        "type": "DONE"
+      },
+      {
+        "symbol": "-",
+        "name": "Cancelled",
+        "nextStatusSymbol": "d",
+        "availableAsCommand": false,
+        "type": "CANCELLED"
+      },
+      {
+        "symbol": "d",
+        "name": "Discarded",
+        "nextStatusSymbol": ">",
+        "availableAsCommand": false,
+        "type": "CANCELLED"
+      },
+      {
+        "symbol": ">",
+        "name": "Delegated",
+        "nextStatusSymbol": " ",
+        "availableAsCommand": false,
+        "type": "TODO"
+      }
+    ]
+  },
+  "isShownInEditModal": {
+    "priority": true,
+    "recurrence": true,
+    "due": true,
+    "scheduled": true,
+    "start": true,
+    "before_this": false,
+    "after_this": false,
+    "status": true,
+    "created": false,
+    "done": true,
+    "cancelled": false
+  },
+  "features": {
+    "INTERNAL_TESTING_ENABLED_BY_DEFAULT": true
+  },
+  "generalSettings": {},
+  "headingOpened": {
+    "Core Statuses": true,
+    "Custom Statuses": true
+  },
+  "debugSettings": {
+    "ignoreSortInstructions": false,
+    "showTaskHiddenData": false,
+    "recordTimings": false
+  },
+  "loggingOptions": {
+    "minLevels": {
+      "": "info",
+      "tasks": "info",
+      "tasks.Cache": "info",
+      "tasks.Events": "info",
+      "tasks.File": "info",
+      "tasks.Query": "info",
+      "tasks.Task": "info"
+    }
+  }
+}
