@@ -24891,6 +24891,31 @@ var Yi = class extends ZE.Modal {
             target: e,
             props: { task: this.task, statusOptions: r, onSubmit: this.onSubmit, allTasks: this.allTasks },
         });
+        if (this.task && this.task.path) {
+            let noteSection = document.createElement("div");
+            noteSection.addClass("tasks-modal-task-note");
+            let noteLabel = document.createElement("span");
+            noteLabel.textContent = _ui("taskNote", "Task note") + ": ";
+            let noteLink = document.createElement("a");
+            noteLink.textContent = this.task.filename || this.task.path;
+            noteLink.addClass("internal-link");
+            noteLink.setAttribute("href", this.task.path);
+            noteLink.addEventListener("click", async (ev) => {
+                ev.preventDefault();
+                const leaf = this.app.workspace.getLeaf("tab");
+                const file = this.app.vault.getAbstractFileByPath(this.task.path);
+                if (file) {
+                    await leaf.openFile(file);
+                    this.app.workspace.setActiveLeaf(leaf, { focus: true });
+                }
+                this.close();
+            });
+            noteSection.appendChild(noteLabel);
+            noteSection.appendChild(noteLink);
+            let buttonSection = e.querySelector(".tasks-modal-button-section");
+            if (buttonSection) buttonSection.parentNode.insertBefore(noteSection, buttonSection);
+            else e.appendChild(noteSection);
+        }
     }
     getKnownStatusesAndCurrentTaskStatusIfNotKnown() {
         let t = Xe.getInstance().registeredStatuses;

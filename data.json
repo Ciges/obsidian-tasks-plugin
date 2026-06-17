@@ -120,6 +120,9 @@
     "done": true,
     "cancelled": false
   },
+  "dismissedNotices": {
+    "live-preview-callout-warning": false
+  },
   "features": {
     "INTERNAL_TESTING_ENABLED_BY_DEFAULT": true
   },

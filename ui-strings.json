@@ -20,6 +20,7 @@
             "start": "Start",
             "done": "Done"
         },
+        "taskNote": "Task note",
         "notRecurring": "not recurring",
         "datePlaceholder": "Try 'Mon' or 'tm' then space",
         "onlyFutureDates": "Only future dates:",
@@ -48,6 +49,7 @@
             "start": "Inicio",
             "done": "Finalización"
         },
+        "taskNote": "Nota de la tarea",
         "notRecurring": "no repetitiva",
         "datePlaceholder": "Escribe 'lun' o 'tm' y espacio",
         "onlyFutureDates": "Solo fechas futuras:",
