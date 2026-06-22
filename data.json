@@ -13,6 +13,14 @@
     "tareas_de_esta_nota_todas": "# Tareas definidas en esta nota PENDIENTES \n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Hogar/Despensa\npath includes {{query.file.path}}\nshow tree\nhide backlink\nhide task count\nhide toolbar"
   },
   "uiLanguage": "es",
+  "prioritySymbols": {
+    "highest": "💣",
+    "high": "🌟",
+    "medium": "🔴",
+    "normal": "🟡",
+    "low": "🟢",
+    "lowest": "⚪"
+  },
   "globalQuery": "((tags include #task) OR (tags include #question) OR (tags include #conversación) OR (tags include #email) OR (tags include #conclusión)) OR (path includes Notas/Hogar/Despensa)",
   "globalFilter": "",
   "removeGlobalFilter": true,

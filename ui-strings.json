@@ -34,12 +34,12 @@
         "descriptionPlaceholder": "Saca la basura",
         "priority": "Prioridad",
         "priorityOptions": {
-            "lowest": "Mínima",
-            "low": "Baja",
-            "normal": "Normal",
-            "medium": "Media",
-            "high": "Alta",
-            "highest": "Máxima"
+            "lowest": "Después",
+            "low": "Este mes",
+            "normal": "La próxima semana",
+            "medium": "Esta semana",
+            "high": "Hoy",
+            "highest": "YA"
         },
         "recurs": "Se repite",
         "recurrencePlaceholder": "Prueba 'every day when done'",

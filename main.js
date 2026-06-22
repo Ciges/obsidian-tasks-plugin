@@ -17794,6 +17794,7 @@ var In,
             (uy = {
                 presets: aD,
                 uiLanguage: "es",
+                prioritySymbols: { highest: "💣", high: "🌟", medium: "🔴", normal: "🟡", low: "🟢", lowest: "⚪" },
                 globalQuery: "",
                 globalFilter: "",
                 removeGlobalFilter: !1,
@@ -23338,7 +23339,7 @@ function iq(n, t, e) {
     let r,
         { priority: i } = t,
         { withAccessKeys: s } = t,
-        { prioritySymbols: a } = In.tasksPluginEmoji.taskSerializer.symbols,
+        a = (function() { const _b = In.tasksPluginEmoji.taskSerializer.symbols.prioritySymbols, _c = typeof X === "function" ? X().prioritySymbols : null; return _c ? {Highest: _c.highest !== undefined ? _c.highest : _b.Highest, High: _c.high !== undefined ? _c.high : _b.High, Medium: _c.medium !== undefined ? _c.medium : _b.Medium, None: _c.normal !== undefined ? _c.normal : _b.None, Low: _c.low !== undefined ? _c.low : _b.Low, Lowest: _c.lowest !== undefined ? _c.lowest : _b.Lowest} : _b; })(),
         o = [
             { value: "lowest", label: _ui("priorityOptions.lowest", "Lowest"), symbol: a.Lowest, accessKey: "o", accessKeyIndex: 1 },
             { value: "low", label: _ui("priorityOptions.low", "Low"), symbol: a.Low, accessKey: "l", accessKeyIndex: 0 },
@@ -33883,6 +33884,7 @@ var bf = class extends Tf.Plugin {
                 fn.registerConsoleLogger(),
                 fy("info", O.t("main.loadingPlugin", { name: this.manifest.name, version: this.manifest.version })),
                 yield this.loadSettings(),
+                (function() { const _ps = X().prioritySymbols; if (_ps) { const m = {highest:"Highest",high:"High",medium:"Medium",normal:"None",low:"Low",lowest:"Lowest"}; for (const [k,v] of Object.entries(_ps)) if (m[k]) yl.prioritySymbols[m[k]] = v; } })(),
                 en.initialise(new yf(this.app));
             let { loggingOptions: t } = X();
             fn.configure(t),
