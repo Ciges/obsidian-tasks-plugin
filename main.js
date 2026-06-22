@@ -21376,6 +21376,7 @@ function yU(n) {
 }
 let _taskUiAllStrings = null;
 let _taskUiStrings = null;
+let _taskContextOptions = [];
 function _ui(key, fallback) {
     if (!_taskUiAllStrings) return fallback !== undefined ? fallback : key;
     if (!_taskUiStrings) {
@@ -24889,10 +24890,51 @@ var Yi = class extends ZE.Modal {
             this.modalEl.appendChild(t);
         let { contentEl: e } = this,
             r = this.getKnownStatusesAndCurrentTaskStatusIfNotKnown();
+        const _contextoRe = /\[context::\s*(.*?)\]/;
+        const _ctxMatch = (this.task ? this.task.description || "" : "").match(_contextoRe);
+        let _selectedContexts = _ctxMatch ? _ctxMatch[1].split(',').map(s => s.trim()).filter(Boolean) : [];
+        const _prevSubmit = this.onSubmit;
+        this.onSubmit = (tasks) => {
+            tasks.forEach(task => {
+                task.description = task.description.replace(/\s*\[context::\s*.*?\]\s*/g, " ").trim();
+                if (_selectedContexts.length > 0)
+                    task.description += " [context:: " + _selectedContexts.join(", ") + "]";
+            });
+            _prevSubmit(tasks);
+        };
         new HE({
             target: e,
             props: { task: this.task, statusOptions: r, onSubmit: this.onSubmit, allTasks: this.allTasks },
         });
+        if (_taskContextOptions.length > 0) {
+            const _ctxDiv = document.createElement("div");
+            _ctxDiv.addClass("tasks-modal-context-section");
+            const _ctxLbl = document.createElement("label");
+            _ctxLbl.textContent = _ui("context", "Contexto");
+            _ctxDiv.appendChild(_ctxLbl);
+            const _ctxChips = document.createElement("div");
+            _ctxChips.addClass("tasks-modal-context-chips");
+            for (const _opt of _taskContextOptions) {
+                const _chip = document.createElement("span");
+                _chip.textContent = _opt;
+                _chip.addClass("tasks-modal-context-chip");
+                if (_selectedContexts.includes(_opt)) _chip.addClass("is-selected");
+                _chip.addEventListener("click", () => {
+                    if (_selectedContexts.includes(_opt)) {
+                        _selectedContexts = _selectedContexts.filter(c => c !== _opt);
+                        _chip.removeClass("is-selected");
+                    } else {
+                        _selectedContexts.push(_opt);
+                        _chip.addClass("is-selected");
+                    }
+                });
+                _ctxChips.appendChild(_chip);
+            }
+            _ctxDiv.appendChild(_ctxChips);
+            const _datesSec = e.querySelector(".tasks-modal-dates-section");
+            if (_datesSec) _datesSec.parentNode.insertBefore(_ctxDiv, _datesSec);
+            else e.appendChild(_ctxDiv);
+        }
         if (this.task && this.task.path) {
             let noteSection = document.createElement("div");
             noteSection.addClass("tasks-modal-task-note");
@@ -31021,6 +31063,7 @@ var zi = class n {
         return A(this, null, function* () {
             let i = this.adjustRelativeLinksInDescription(t, r);
             i = Ae.getInstance().removeAsWordFromDependingOnSettings(i);
+            i = i.replace(/\[context::\s*([^\]]*)\]/g, (_, v) => v.trim());
             let { debugSettings: s } = X();
             s.showTaskHiddenData &&
                 (i += `<br>\u{1F41B} <b>${t.lineNumber}</b> . ${t.sectionStart} . ${t.sectionIndex} . '<code>${t.originalMarkdown}</code>'<br>'<code>${t.path}</code>' > '<code>${t.precedingHeader}</code>'<br>`),
@@ -33880,6 +33923,10 @@ var bf = class extends Tf.Plugin {
                     )
                 );
             } catch (e) { console.error("Tasks plugin: failed to load ui-strings.json", e); }
+            try {
+                const _ctxRaw = yield this.app.vault.adapter.read("Obsidian/listados/contextos_tarea.md");
+                _taskContextOptions = _ctxRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            } catch (_e2) { console.error("Tasks plugin: failed to load contextos_tarea.md", _e2); }
             yield gT(),
                 fn.registerConsoleLogger(),
                 fy("info", O.t("main.loadingPlugin", { name: this.manifest.name, version: this.manifest.version })),

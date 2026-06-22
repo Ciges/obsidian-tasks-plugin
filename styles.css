@@ -14,3 +14,41 @@
 .tasks-modal-task-note a:hover {
     text-decoration: underline;
 }
+.tasks-modal-context-section {
+    display: grid;
+    grid-template-columns: 6em auto;
+    column-gap: .5em;
+    align-items: flex-start;
+    padding: 4px 0;
+}
+.tasks-modal-context-section > label {
+    font-size: var(--font-ui-small);
+    color: var(--text-normal);
+    padding-top: 4px;
+}
+.tasks-modal-context-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.tasks-modal-context-chip {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--background-modifier-border);
+    background: var(--background-secondary);
+    font-size: var(--font-ui-small);
+    user-select: none;
+    opacity: 0.5;
+    transition: opacity 0.1s, background 0.1s;
+}
+.tasks-modal-context-chip:hover {
+    opacity: 0.85;
+    border-color: var(--interactive-accent);
+}
+.tasks-modal-context-chip.is-selected {
+    opacity: 1;
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border-color: var(--interactive-accent);
+}

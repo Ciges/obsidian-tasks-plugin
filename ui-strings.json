@@ -20,6 +20,7 @@
             "start": "Start",
             "done": "Done"
         },
+        "context": "Context",
         "taskNote": "Task note",
         "notRecurring": "not recurring",
         "datePlaceholder": "Try 'Mon' or 'tm' then space",
@@ -49,6 +50,7 @@
             "start": "Inicio",
             "done": "Finalización"
         },
+        "context": "Contexto",
         "taskNote": "Nota de la tarea",
         "notRecurring": "no repetitiva",
         "datePlaceholder": "Escribe 'lun' o 'tm' y espacio",
