@@ -1,16 +1,8 @@
 {
   "presets": {
-    "this_file": "path includes {{query.file.path}}",
-    "this_folder": "folder includes {{query.file.folder}}",
-    "this_folder_only": "filter by function task.file.folder === query.file.folder",
-    "this_root": "root includes {{query.file.root}}",
-    "hide_date_fields": "# Hide any values for all date fields\nhide due date\nhide scheduled date\nhide start date\nhide created date\nhide done date\nhide cancelled date",
-    "hide_non_date_fields": "# Hide all the non-date fields, but not tags\nhide id\nhide depends on\nhide recurrence rule\nhide on completion\nhide priority",
-    "hide_query_elements": "# Hide postpone, edit and backinks\nhide postpone button\nhide edit button\nhide backlinks",
-    "hide_everything": "# Hide everything except description and any tags\npreset hide_date_fields\npreset hide_non_date_fields\npreset hide_query_elements",
-    "tareas_de_hoy": "# Tareas con fecha de hoy (o ya pasadas) PENDIENTES\nnot done\n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Hogar/Despensa\n(due today) OR (scheduled today) OR (due before today) OR (scheduled before today)\ngroup by priority\nshow tree\nhide backlink\nhide task count\nhide toolbar",
-    "tareas_de_esta_nota": "# Tareas definidas en esta nota PENDIENTES\nnot done \n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Hogar/Despensa\npath includes {{query.file.path}}\nshow tree\nhide backlink\nhide task count\nhide toolbar",
-    "tareas_de_esta_nota_todas": "# Tareas definidas en esta nota PENDIENTES \n(tags include #task) OR (tags include #question) OR (tags include #conclusión)\npath does not include Notas/Hogar/Despensa\npath includes {{query.file.path}}\nshow tree\nhide backlink\nhide task count\nhide toolbar"
+    "tareas_de_hoy": "# Tareas con fecha de hoy (o ya pasadas) PENDIENTES\nnot done\n(due today) OR (scheduled today) OR (due before today) OR (scheduled before today)\ngroup by priority",
+    "tareas_de_esta_nota": "# Tareas definidas en esta nota PENDIENTES\nnot done \npath includes {{query.file.path}}",
+    "tareas_de_esta_nota_todas": "# Tareas definidas en esta nota\npath includes {{query.file.path}}"
   },
   "uiLanguage": "es",
   "prioritySymbols": {

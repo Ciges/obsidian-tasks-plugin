@@ -19488,8 +19488,20 @@ var ke,
                 return Number.parseInt(this.priority);
             }
             get priorityNameGroupText() {
-                let e = hr.priorityNameUsingNormal(this.priority);
-                return `%%${this.priority}%%${e} priority`;
+                const _m = {
+                    "0": ["0", "highest", "Highest"],
+                    "1": ["1", "high",    "High"],
+                    "2": ["2", "medium",  "Medium"],
+                    "7": ["3", "normal",  "Normal"],
+                    "3": ["4", "none",    "None"],
+                    "4": ["5", "low",     "Low"],
+                    "6": ["6", "nextMonth","NextMonth"],
+                    "5": ["7", "lowest",  "Lowest"],
+                };
+                const [sort, uiKey, symKey] = _m[this.priority] || ["9", "none", "None"];
+                const label = _ui("priorityOptions." + uiKey, symKey);
+                const emoji = yl ? (yl.prioritySymbols[symKey] || "") : "";
+                return `%%${sort}%%${label}${emoji ? " " + emoji : ""}`;
             }
             get descriptionWithoutTags() {
                 return this.description.replace(We.hashTags, "").trim();
