@@ -52,3 +52,14 @@
     color: var(--text-on-accent);
     border-color: var(--interactive-accent);
 }
+
+/* Que la etiqueta "Prioridad" abarque 3 filas en vez de 2, de modo que
+   "Hoy" y "YA" se desplacen a las columnas de "La próxima semana" y
+   "Sin prioridad" en lugar de quedar pegados a la izquierda.
+   Scopeado a >=650px (donde aplica el layout de 4 columnas) para no
+   romper las variantes responsive del plugin. */
+@media (min-width: 650px) {
+    .tasks-modal-priority-section > label {
+        grid-row: 1 / span 3;
+    }
+}

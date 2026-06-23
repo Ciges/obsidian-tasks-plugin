@@ -23371,11 +23371,11 @@ function iq(n, t, e) {
         { withAccessKeys: s } = t,
         a = (function() { const _b = In.tasksPluginEmoji.taskSerializer.symbols.prioritySymbols, _c = typeof X === "function" ? X().prioritySymbols : null; return _c ? {Highest: _c.highest !== undefined ? _c.highest : _b.Highest, High: _c.high !== undefined ? _c.high : _b.High, Medium: _c.medium !== undefined ? _c.medium : _b.Medium, Normal: _c.normal !== undefined ? _c.normal : _b.Normal, None: _b.None, Low: _c.low !== undefined ? _c.low : _b.Low, Lowest: _c.lowest !== undefined ? _c.lowest : _b.Lowest, NextMonth: _c.nextMonth !== undefined ? _c.nextMonth : _b.NextMonth} : _b; })(),
         o = [
+            { value: "none", label: _ui("priorityOptions.none", "No priority"), symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
             { value: "lowest", label: _ui("priorityOptions.lowest", "Lowest"), symbol: a.Lowest, accessKey: "o", accessKeyIndex: 1 },
             { value: "next-month", label: _ui("priorityOptions.nextMonth", "Next month"), symbol: a.NextMonth, accessKey: "x", accessKeyIndex: 1 },
             { value: "low", label: _ui("priorityOptions.low", "Low"), symbol: a.Low, accessKey: "l", accessKeyIndex: 0 },
             { value: "normal", label: _ui("priorityOptions.normal", "Normal"), symbol: a.Normal, accessKey: "a", accessKeyIndex: 1 },
-            { value: "none", label: _ui("priorityOptions.none", "No priority"), symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
             { value: "medium", label: _ui("priorityOptions.medium", "Medium"), symbol: a.Medium, accessKey: "m", accessKeyIndex: 0 },
             { value: "high", label: _ui("priorityOptions.high", "High"), symbol: a.High, accessKey: "h", accessKeyIndex: 0 },
             { value: "highest", label: _ui("priorityOptions.highest", "Highest"), symbol: a.Highest, accessKey: "i", accessKeyIndex: 1 },
