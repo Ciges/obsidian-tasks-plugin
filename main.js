@@ -16609,8 +16609,10 @@ var hs,
                 Highest: "\u{1F53A}",
                 High: "\u23EB",
                 Medium: "\u{1F53C}",
+                Normal: "\u{1F7E1}",
                 Low: "\u{1F53D}",
                 Lowest: "\u23EC",
+                NextMonth: "\u{1F7E3}",
                 None: "",
             },
             startDateSymbol: "\u{1F6EB}",
@@ -16624,7 +16626,7 @@ var hs,
             dependsOnSymbol: "\u26D4",
             idSymbol: "\u{1F194}",
             TaskFormatRegularExpressions: {
-                priorityRegex: ma("(\u{1F53A}|\u23EB|\u{1F53C}|\u{1F53D}|\u23EC)", ""),
+                priorityRegex: ma("(\u{1F53A}|\u23EB|\u{1F53C}|\u{1F53D}|\u23EC|\u{1F7E3})", ""),
                 startDateRegex: fa("\u{1F6EB}"),
                 createdDateRegex: fa("\u2795"),
                 scheduledDateRegex: fa("(?:\u23F3|\u231B)"),
@@ -16675,9 +16677,13 @@ var hs,
                                   ? (v = " " + i.High)
                                   : t.priority === "2"
                                     ? (v = " " + i.Medium)
-                                    : t.priority === "4"
-                                      ? (v = " " + i.Low)
-                                      : t.priority === "5" && (v = " " + i.Lowest),
+                                    : t.priority === "7"
+                                      ? (v = " " + i.Normal)
+                                      : t.priority === "4"
+                                        ? (v = " " + i.Low)
+                                        : t.priority === "5"
+                                          ? (v = " " + i.Lowest)
+                                          : t.priority === "6" && (v = " " + i.NextMonth),
                             v
                         );
                     }
@@ -16720,6 +16726,10 @@ var hs,
                         return "1";
                     case e.Highest:
                         return "0";
+                    case e.NextMonth:
+                        return "6";
+                    case e.Normal:
+                        return "7";
                     default:
                         return "3";
                 }
@@ -17348,6 +17358,12 @@ var hr,
                     case "5":
                         e = "Lowest";
                         break;
+                    case "6":
+                        e = "NextMonth";
+                        break;
+                    case "7":
+                        e = "Normal";
+                        break;
                 }
                 return e;
             }
@@ -17358,6 +17374,10 @@ var hr,
                 switch (t.toLowerCase()) {
                     case "lowest":
                         return "5";
+                    case "next-month":
+                        return "6";
+                    case "normal":
+                        return "7";
                     case "low":
                         return "4";
                     case "medium":
@@ -17390,8 +17410,10 @@ var sy,
                 Highest: "priority:: highest",
                 High: "priority:: high",
                 Medium: "priority:: medium",
+                Normal: "priority:: normal",
                 Low: "priority:: low",
                 Lowest: "priority:: lowest",
+                NextMonth: "priority:: next-month",
                 None: "",
             },
             startDateSymbol: "start::",
@@ -17405,7 +17427,7 @@ var sy,
             idSymbol: "id::",
             dependsOnSymbol: "dependsOn::",
             TaskFormatRegularExpressions: {
-                priorityRegex: gr(/priority:: *(highest|high|medium|low|lowest)/),
+                priorityRegex: gr(/priority:: *(highest|high|medium|normal|low|lowest|next-month)/),
                 startDateRegex: gr(/start:: *(\d{4}-\d{2}-\d{2})/),
                 createdDateRegex: gr(/created:: *(\d{4}-\d{2}-\d{2})/),
                 scheduledDateRegex: gr(/scheduled:: *(\d{4}-\d{2}-\d{2})/),
@@ -19247,11 +19269,14 @@ var Vt,
                     case "2":
                         e += 0.65 * Vt.priorityCoefficient;
                         break;
-                    case "3":
+                    case "7":
                         e += 0.325 * Vt.priorityCoefficient;
                         break;
                     case "5":
                         e -= 0.3 * Vt.priorityCoefficient;
+                        break;
+                    case "6":
+                        e -= 0.15 * Vt.priorityCoefficient;
                         break;
                 }
                 return e;
@@ -23035,13 +23060,17 @@ var Vc = class n {
             s = "none";
         t.priority === "5"
             ? (s = "lowest")
-            : t.priority === "4"
-              ? (s = "low")
-              : t.priority === "2"
-                ? (s = "medium")
-                : t.priority === "1"
-                  ? (s = "high")
-                  : t.priority === "0" && (s = "highest");
+            : t.priority === "6"
+              ? (s = "next-month")
+              : t.priority === "4"
+                ? (s = "low")
+                : t.priority === "7"
+                  ? (s = "normal")
+                  : t.priority === "2"
+                    ? (s = "medium")
+                    : t.priority === "1"
+                      ? (s = "high")
+                      : t.priority === "0" && (s = "highest");
         let a = [];
         for (let l of t.dependsOn) {
             let u = e.find((c) => c.id === l);
@@ -23340,11 +23369,13 @@ function iq(n, t, e) {
     let r,
         { priority: i } = t,
         { withAccessKeys: s } = t,
-        a = (function() { const _b = In.tasksPluginEmoji.taskSerializer.symbols.prioritySymbols, _c = typeof X === "function" ? X().prioritySymbols : null; return _c ? {Highest: _c.highest !== undefined ? _c.highest : _b.Highest, High: _c.high !== undefined ? _c.high : _b.High, Medium: _c.medium !== undefined ? _c.medium : _b.Medium, None: _c.normal !== undefined ? _c.normal : _b.None, Low: _c.low !== undefined ? _c.low : _b.Low, Lowest: _c.lowest !== undefined ? _c.lowest : _b.Lowest} : _b; })(),
+        a = (function() { const _b = In.tasksPluginEmoji.taskSerializer.symbols.prioritySymbols, _c = typeof X === "function" ? X().prioritySymbols : null; return _c ? {Highest: _c.highest !== undefined ? _c.highest : _b.Highest, High: _c.high !== undefined ? _c.high : _b.High, Medium: _c.medium !== undefined ? _c.medium : _b.Medium, Normal: _c.normal !== undefined ? _c.normal : _b.Normal, None: _b.None, Low: _c.low !== undefined ? _c.low : _b.Low, Lowest: _c.lowest !== undefined ? _c.lowest : _b.Lowest, NextMonth: _c.nextMonth !== undefined ? _c.nextMonth : _b.NextMonth} : _b; })(),
         o = [
             { value: "lowest", label: _ui("priorityOptions.lowest", "Lowest"), symbol: a.Lowest, accessKey: "o", accessKeyIndex: 1 },
+            { value: "next-month", label: _ui("priorityOptions.nextMonth", "Next month"), symbol: a.NextMonth, accessKey: "x", accessKeyIndex: 1 },
             { value: "low", label: _ui("priorityOptions.low", "Low"), symbol: a.Low, accessKey: "l", accessKeyIndex: 0 },
-            { value: "none", label: _ui("priorityOptions.normal", "Normal"), symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
+            { value: "normal", label: _ui("priorityOptions.normal", "Normal"), symbol: a.Normal, accessKey: "a", accessKeyIndex: 1 },
+            { value: "none", label: _ui("priorityOptions.none", "No priority"), symbol: a.None, accessKey: "n", accessKeyIndex: 0 },
             { value: "medium", label: _ui("priorityOptions.medium", "Medium"), symbol: a.Medium, accessKey: "m", accessKeyIndex: 0 },
             { value: "high", label: _ui("priorityOptions.high", "High"), symbol: a.High, accessKey: "h", accessKeyIndex: 0 },
             { value: "highest", label: _ui("priorityOptions.highest", "Highest"), symbol: a.Highest, accessKey: "i", accessKeyIndex: 1 },
@@ -33931,7 +33962,7 @@ var bf = class extends Tf.Plugin {
                 fn.registerConsoleLogger(),
                 fy("info", O.t("main.loadingPlugin", { name: this.manifest.name, version: this.manifest.version })),
                 yield this.loadSettings(),
-                (function() { const _ps = X().prioritySymbols; if (_ps) { const m = {highest:"Highest",high:"High",medium:"Medium",normal:"None",low:"Low",lowest:"Lowest"}; for (const [k,v] of Object.entries(_ps)) if (m[k]) yl.prioritySymbols[m[k]] = v; } })(),
+                (function() { const _ps = X().prioritySymbols; if (_ps) { const m = {highest:"Highest",high:"High",medium:"Medium",normal:"Normal",low:"Low",lowest:"Lowest",nextMonth:"NextMonth"}; for (const [k,v] of Object.entries(_ps)) if (m[k]) yl.prioritySymbols[m[k]] = v; } })(),
                 en.initialise(new yf(this.app));
             let { loggingOptions: t } = X();
             fn.configure(t),

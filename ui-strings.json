@@ -6,8 +6,10 @@
         "priority": "Priority",
         "priorityOptions": {
             "lowest": "Lowest",
+            "nextMonth": "Next month",
             "low": "Low",
             "normal": "Normal",
+            "none": "No priority",
             "medium": "Medium",
             "high": "High",
             "highest": "Highest"
@@ -36,8 +38,10 @@
         "priority": "Prioridad",
         "priorityOptions": {
             "lowest": "Después",
+            "nextMonth": "El mes que viene",
             "low": "Este mes",
             "normal": "La próxima semana",
+            "none": "Sin prioridad",
             "medium": "Esta semana",
             "high": "Hoy",
             "highest": "YA"

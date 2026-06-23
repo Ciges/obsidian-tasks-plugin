@@ -19,9 +19,10 @@
     "medium": "🔴",
     "normal": "🟡",
     "low": "🟢",
-    "lowest": "⚪"
+    "lowest": "⚪",
+    "nextMonth": "🟣"
   },
-  "globalQuery": "((tags include #task) OR (tags include #question) OR (tags include #conversación) OR (tags include #email) OR (tags include #conclusión)) OR (path includes Notas/Hogar/Despensa)",
+  "globalQuery": "((tags include #task) OR (tags include #question) OR (tags include #conversación) OR (tags include #email) OR (tags include #conclusión)) OR (path includes Notas/Hogar/Despensa)\nsort by function \\\n    const orden = {highest: 0, high: 1, medium: 2, normal: 3, low: 4, nextMonth: 5, lowest: 6}; \\\n    const m = task.description.match(/\\[priority::\\s*(\\w+)\\]/); \\\n    return orden[m ? m[1] : 'normal'] ?? 99;\nsort by done\nsort by due\nsort by scheduled\nshow tree\nhide backlinks\nhide toolbar\nhide task count",
   "globalFilter": "",
   "removeGlobalFilter": true,
   "taskFormat": "dataview",
