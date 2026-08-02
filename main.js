@@ -31080,6 +31080,7 @@ var zi = class n {
                 a = In.tasksPluginEmoji.taskSerializer;
             for (let o of this.taskLayoutOptions.shownComponents) {
                 let l = a.componentToString(t, this.queryLayoutOptions.shortMode, o);
+                o === "doneDate" && (l = l.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/, "$1 $2"));
                 if (l) {
                     let u = Ve("span", e),
                         c = Ve("span", u);

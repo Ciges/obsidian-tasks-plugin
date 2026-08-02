@@ -236,3 +236,17 @@ Adds an optional hour/minute to the done date, in both supported task formats (T
 A `data.json`-only fix (repointing `d`'s `nextStatusSymbol` away from `>`) is not durable: Obsidian keeps the whole settings object in memory once the plugin is loaded, and periodically writes that in-memory copy back to `data.json`, silently reverting any direct edit to the file made while Obsidian is running.
 
 **Fix:** `createNextOccurrence()` (around line 19450) no longer calls `getNextRecurrenceStatusOrCreate()`. It now sets the next occurrence's status directly and unconditionally to the blank status: `Xe.getInstance().bySymbolOrCreate(" ")`. This is independent of `data.json`'s custom status chain — recurring tasks always reopen as `[ ]`, regardless of which status the previous occurrence was completed with. `getNextRecurrenceStatusOrCreate()` and `getNextRecurrenceStatusOfType()` are left in place (still used elsewhere / part of the base plugin) but are no longer called from the recurrence path.
+
+---
+
+### 5. Done date displayed without the `T` separator
+
+The stored/serialized `doneDate` text (in the note, both emoji `✅` and Dataview `[completion:: ...]` formats) keeps the `YYYY-MM-DDTHH:mm` format from modification #3 — that part is unchanged and still needs the `T` so the plugin's own regexes can parse it back.
+
+What changed is display-only: reading view and `tasks` query results render every task through `taskToHtml()` (`zi` class, ~line 31077), which **always** uses the emoji serializer (`In.tasksPluginEmoji.taskSerializer.componentToString(...)`) regardless of the configured `taskFormat`, purely to build the pretty HTML badges — this is a separate call path from `Task.toString()` (the one that writes back to the file). Right after that call, for the `doneDate` component only, the `T` is replaced with a space before the text is handed to the renderer:
+
+```js
+o === "doneDate" && (l = l.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/, "$1 $2"));
+```
+
+So the note text keeps `✅ 2026-08-02T14:35` (parseable), while reading view / query results show `✅ 2026-08-02 14:35`. `Task.toString()`/`serialize()` (used when actually writing the line back to the file, e.g. on status toggle) does not go through `taskToHtml()`, so it is untouched.
