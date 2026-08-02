@@ -200,3 +200,29 @@ this.close();
 - Uses `querySelector(".tasks-modal-button-section")` to insert the div before the buttons
 - Opens the note in a new tab and focuses it
 - Only shown when `task.path` is not empty (tasks that already exist in a note)
+
+---
+
+### 3. Time in the done date (`completion`)
+
+Adds an optional hour/minute to the done date, in both supported task formats (Tasks emoji `✅` and Dataview `[completion:: ...]`), controlled by a new setting **"Add time also when task is completed"** (Settings → Dates, right after "Set done date"; default: **on**).
+
+**New setting:**
+
+- `addTimeToDoneDate: true` added to the settings defaults object (next to `setDoneDate`)
+- Persisted/merged the same way as every other setting (no migration needed — missing key in an old `data.json` falls back to the default)
+
+**Parsing (`gs.deserialize`)**
+
+- Both `doneDateRegex` definitions (Tasks-emoji `fa("✅")` and Dataview `completion:: *(\d{4}-\d{2}-\d{2})`) had their capture group extended to `(\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2})?)` — the time suffix is optional, so existing date-only completions still match unchanged. Only the `doneDate` regex was touched; the other five date fields (`due`, `scheduled`, `start`, `created`, `cancelled`) keep the original date-only regex.
+- New method `extractDoneDateField` (sibling of the generic `extractDateField`) parses the capture with `window.moment(value, [dateFormat, "YYYY-MM-DDTHH:mm"])` — moment picks whichever format leaves no unmatched characters. The generic `extractDateField` used by the other five fields is untouched.
+- `deserialize()` calls `extractDoneDateField` only for the `doneDate` regex; every other field still calls `extractDateField`.
+
+**Serialization (`gs.componentToString`, case `"doneDate"`)**
+
+- Formats with `t.doneDate.format(X().addTimeToDoneDate ? "YYYY-MM-DDTHH:mm" : dateFormat)` instead of always using the shared `pa()` helper (which is still used, unmodified, by every other date field).
+- The Dataview serializer (`Dc`) inherits this via `super.componentToString()`, so both formats are covered by this single change.
+
+**Capture time already happens today**: `Task.handleNewStatus(status, now = window.moment())` already stores the full-precision `now` as `doneDate` when a task transitions to `DONE` — this was never truncated to midnight. This fork modification only changes what gets *written to* and *read from* the markdown line; no change was needed to how the date is captured at completion time.
+
+**Caveat:** a task completed before this change (date-only `doneDate`) will render as `...T00:00` if it gets re-serialized (e.g. edited via the "Create or edit task" modal) after this fork modification, since the stored moment defaults to midnight when no time was parsed. It is not rewritten proactively — only on next serialization of that specific line.

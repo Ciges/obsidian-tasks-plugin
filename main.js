@@ -16631,7 +16631,7 @@ var hs,
                 createdDateRegex: fa("\u2795"),
                 scheduledDateRegex: fa("(?:\u23F3|\u231B)"),
                 dueDateRegex: fa("(?:\u{1F4C5}|\u{1F4C6}|\u{1F5D3})"),
-                doneDateRegex: fa("\u2705"),
+                doneDateRegex: ma("\u2705", "(\\d{4}-\\d{2}-\\d{2}(?:T\\d{2}:\\d{2})?)"),
                 cancelledDateRegex: fa("\u274C"),
                 recurrenceRegex: ma("\u{1F501}", "([a-zA-Z0-9, !]+)"),
                 onCompletionRegex: ma("\u{1F3C1}", "([a-zA-Z]+)"),
@@ -16694,7 +16694,11 @@ var hs,
                     case "scheduledDate":
                         return t.scheduledDateIsInferred ? "" : pa(e, o, t.scheduledDate);
                     case "doneDate":
-                        return pa(e, l, t.doneDate);
+                        return t.doneDate
+                            ? e
+                                ? " " + l
+                                : ` ${l} ${t.doneDate.format(X().addTimeToDoneDate ? "YYYY-MM-DDTHH:mm" : We.dateFormat)}`
+                            : "";
                     case "cancelledDate":
                         return pa(e, u, t.cancelledDate);
                     case "dueDate":
@@ -16739,6 +16743,11 @@ var hs,
                     r(window.moment(i[1], We.dateFormat));
                 });
             }
+            extractDoneDateField(t, e, r) {
+                this.extractField(t, e, (i) => {
+                    r(window.moment(i[1], [We.dateFormat, "YYYY-MM-DDTHH:mm"]));
+                });
+            }
             extractField(t, e, r) {
                 let i = t.line.match(e);
                 i !== null && (r(i), (t.line = t.line.replace(e, "").trim()), (t.matched = !0));
@@ -16766,7 +16775,7 @@ var hs,
                         this.extractField(r, e.priorityRegex, (x) => {
                             i = this.parsePriority(x[1]);
                         }),
-                        this.extractDateField(r, e.doneDateRegex, (x) => (l = x)),
+                        this.extractDoneDateField(r, e.doneDateRegex, (x) => (l = x)),
                         this.extractDateField(r, e.cancelledDateRegex, (x) => (u = x)),
                         this.extractDateField(r, e.dueDateRegex, (x) => (o = x)),
                         this.extractDateField(r, e.scheduledDateRegex, (x) => (a = x)),
@@ -17432,7 +17441,7 @@ var sy,
                 createdDateRegex: gr(/created:: *(\d{4}-\d{2}-\d{2})/),
                 scheduledDateRegex: gr(/scheduled:: *(\d{4}-\d{2}-\d{2})/),
                 dueDateRegex: gr(/due:: *(\d{4}-\d{2}-\d{2})/),
-                doneDateRegex: gr(/completion:: *(\d{4}-\d{2}-\d{2})/),
+                doneDateRegex: gr(/completion:: *(\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2})?)/),
                 cancelledDateRegex: gr(/cancelled:: *(\d{4}-\d{2}-\d{2})/),
                 recurrenceRegex: gr(/repeat:: *([a-zA-Z0-9, !]+)/),
                 onCompletionRegex: gr(/onCompletion:: *([a-zA-Z]+)/),
@@ -17823,6 +17832,7 @@ var In,
                 taskFormat: "tasksPluginEmoji",
                 setCreatedDate: !1,
                 setDoneDate: !0,
+                addTimeToDoneDate: !0,
                 setCancelledDate: !0,
                 autoSuggestInEditor: !0,
                 autoSuggestMinMatch: 0,
@@ -33350,6 +33360,19 @@ var at = class at extends me.PluginSettingTab {
                     c.setValue(d.setDoneDate).onChange((f) =>
                         A(this, null, function* () {
                             it({ setDoneDate: f }), yield this.plugin.saveSettings();
+                        })
+                    );
+                }),
+            new me.Setting(e)
+                .setName("Add time also when task is completed")
+                .setDesc(
+                    "When enabled, the done date also records the hour and minute (YYYY-MM-DDTHH:mm) instead of just the date."
+                )
+                .addToggle((c) => {
+                    let d = X();
+                    c.setValue(d.addTimeToDoneDate).onChange((f) =>
+                        A(this, null, function* () {
+                            it({ addTimeToDoneDate: f }), yield this.plugin.saveSettings();
                         })
                     );
                 }),
