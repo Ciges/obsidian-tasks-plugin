@@ -56,7 +56,7 @@
       {
         "symbol": " ",
         "name": "TODO",
-        "nextStatusSymbol": "/",
+        "nextStatusSymbol": "c",
         "availableAsCommand": false,
         "type": "TODO"
       },
@@ -70,7 +70,7 @@
       {
         "symbol": "p",
         "name": "OK",
-        "nextStatusSymbol": "c",
+        "nextStatusSymbol": ">",
         "availableAsCommand": false,
         "type": "DONE"
       },
@@ -96,18 +96,18 @@
         "type": "CANCELLED"
       },
       {
-        "symbol": "d",
-        "name": "Discarded",
-        "nextStatusSymbol": ">",
-        "availableAsCommand": false,
-        "type": "CANCELLED"
-      },
-      {
         "symbol": ">",
         "name": "Delegated",
-        "nextStatusSymbol": " ",
+        "nextStatusSymbol": "c",
         "availableAsCommand": false,
         "type": "TODO"
+      },
+      {
+        "symbol": "d",
+        "name": "Discarded",
+        "nextStatusSymbol": " ",
+        "availableAsCommand": false,
+        "type": "CANCELLED"
       }
     ]
   },

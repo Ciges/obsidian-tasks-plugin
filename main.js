@@ -19447,7 +19447,7 @@ var ke,
                 i && (s = window.moment());
                 let a = null,
                     o = null,
-                    u = Xe.getInstance().getNextRecurrenceStatusOrCreate(e);
+                    u = Xe.getInstance().bySymbolOrCreate(" ");
                 return new n(
                     pe(Y(Y({}, this), r), {
                         status: u,

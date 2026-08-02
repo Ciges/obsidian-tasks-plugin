@@ -226,3 +226,13 @@ Adds an optional hour/minute to the done date, in both supported task formats (T
 **Capture time already happens today**: `Task.handleNewStatus(status, now = window.moment())` already stores the full-precision `now` as `doneDate` when a task transitions to `DONE` — this was never truncated to midnight. This fork modification only changes what gets *written to* and *read from* the markdown line; no change was needed to how the date is captured at completion time.
 
 **Caveat:** a task completed before this change (date-only `doneDate`) will render as `...T00:00` if it gets re-serialized (e.g. edited via the "Create or edit task" modal) after this fork modification, since the stored moment defaults to midnight when no time was parsed. It is not rewritten proactively — only on next serialization of that specific line.
+
+---
+
+### 4. Recurring tasks always reopen as plain `[ ]`
+
+**Problem:** this vault has 8 custom statuses (`statusSettings.customStatuses` in `data.json`) chained in a single cycle via `nextStatusSymbol`: ` → / → p → c → x → - → d → > → ` (back to blank). `Task.createNextOccurrence()` picked the new occurrence's status by calling `StatusRegistry.getNextRecurrenceStatusOrCreate(e)`, which walks that `nextStatusSymbol` chain looking for the first status of type `TODO` (or failing that, `IN_PROGRESS`). Because the custom `>` (Delegated) status is typed `TODO` (even though semantically it means "handed off to someone else", not "ready to do"), it was always the first `TODO`-typed status found on the chain walk from any `DONE` status (`p`/`c`/`x`), so every recurring task reopened as `[>]` instead of `[ ]`.
+
+A `data.json`-only fix (repointing `d`'s `nextStatusSymbol` away from `>`) is not durable: Obsidian keeps the whole settings object in memory once the plugin is loaded, and periodically writes that in-memory copy back to `data.json`, silently reverting any direct edit to the file made while Obsidian is running.
+
+**Fix:** `createNextOccurrence()` (around line 19450) no longer calls `getNextRecurrenceStatusOrCreate()`. It now sets the next occurrence's status directly and unconditionally to the blank status: `Xe.getInstance().bySymbolOrCreate(" ")`. This is independent of `data.json`'s custom status chain — recurring tasks always reopen as `[ ]`, regardless of which status the previous occurrence was completed with. `getNextRecurrenceStatusOrCreate()` and `getNextRecurrenceStatusOfType()` are left in place (still used elsewhere / part of the base plugin) but are no longer called from the recurrence path.

@@ -8,4 +8,5 @@ The following evolutions have been made:
 - Task user interface is now in English and Spanish, with strings in separate json file
 - A link to the note of the task is added
 - The done date can optionally also record the time (`YYYY-MM-DDTHH:mm`), toggled by a new setting "Add time also when task is completed" (on by default)
+- Recurring tasks always create the next occurrence as plain `[ ]` (empty/Todo), ignoring the custom status chain
 
