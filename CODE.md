@@ -250,3 +250,67 @@ o === "doneDate" && (l = l.replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/, "$1 $2")
 ```
 
 So the note text keeps `✅ 2026-08-02T14:35` (parseable), while reading view / query results show `✅ 2026-08-02 14:35`. `Task.toString()`/`serialize()` (used when actually writing the line back to the file, e.g. on status toggle) does not go through `taskToHtml()`, so it is untouched.
+
+---
+
+### 6. Recurring tasks: `start` stays fixed, `scheduled` always advances, `reminder` advances with it
+
+**Problem:** for daily-repeating tasks that carry both `[scheduled:: ...]` and `[start:: ...]` (e.g. pet-care chores), completing the task and generating the next occurrence advanced one of the two date fields and left the other frozen at its original value forever — inconsistently, sometimes `start` advanced while `scheduled` stayed put, sometimes the reverse. Since every query in this vault (`globalQuery`, `tareas_de_hoy`, `tareas_de_esta_semana`) filters by `due`/`scheduled` and never by `start`, a task whose `scheduled` froze looked permanently overdue even though it was being completed on time every day. On top of that, `[reminder:: ...]` (a plain inline field read by the Reminder plugin fork, not a field Tasks itself models) was never touched by recurrence at all — it always got copied verbatim into the next occurrence, so reminders never advanced.
+
+**Root cause (Occurrence date math, `li.next(t)`, ~line 13610):** the original logic picked a single "reference date" per `getDatePriorityOrder()` (`due > scheduled > start` given `removeScheduledDateOnRecurrence: false`) and shifted every set date field by the same day-offset relative to that reference. In principle this should have advanced `scheduled` reliably (offset 0 from itself) while `start` trailed by whatever gap it had — but in practice the two fields in this vault were always initialized equal (`start` == `scheduled`), and which field actually got recomputed vs. silently carried over as leftover unparsed text turned out to depend on something not fully explained by static reading of this code path alone. Rather than keep chasing that inconsistency, the field roles were made explicit and unconditional instead of inferred from date-priority order.
+
+**Fix, part 1 — `start`/`scheduled` (`li.next(t)`, the `Occurrence` class used by `Recurrence.next()`):**
+
+```js
+next(t) {
+    if (this.referenceDate === null) return new n({ startDate: null, scheduledDate: null, dueDate: null });
+    let o = this.startDate,
+        l = this.scheduledDate !== null ? window.moment(t) : null,
+        u = this.nextOccurrenceDate(this.dueDate, t);
+    return new n({ startDate: o, scheduledDate: l, dueDate: u });
+}
+```
+
+`startDate` is now always carried over unchanged (`o = this.startDate`, no recalculation at all). `scheduledDate`, when set, is always set to exactly the newly computed reference date `t` (skipping the offset/duration math that depended on `getDatePriorityOrder`), so it always advances by the recurrence interval. `dueDate` is untouched (still uses the original offset-based `nextOccurrenceDate`, since this vault doesn't use `due` and it wasn't part of the request). The `removeScheduledDateOnRecurrence` setting is no longer consulted here — `scheduled` is never nulled out on recurrence.
+
+**Fix, part 2 — `reminder` (`Task.createNextOccurrence`, ~line 19444):** since `[reminder:: ...]` isn't a field Tasks models (it lives inside the free-text `description`), advancing it needs to happen where the next occurrence's description is assembled:
+
+```js
+createNextOccurrence(e, r) {
+    let { setCreatedDate: i } = X(),
+        s = null;
+    i && (s = window.moment());
+    let a = null,
+        o = null,
+        u = Xe.getInstance().bySymbolOrCreate(" "),
+        newDescription = this.description;
+    if (this.scheduledDate !== null && r.scheduledDate !== null) {
+        let deltaDays = Math.round(
+            window.moment(r.scheduledDate).startOf("day").diff(window.moment(this.scheduledDate).startOf("day"), "days")
+        );
+        deltaDays !== 0 && (newDescription = this.shiftReminderField(newDescription, deltaDays));
+    }
+    return new n(
+        pe(Y(Y({}, this), r), {
+            status: u,
+            blockLink: "",
+            id: "",
+            dependsOn: [],
+            createdDate: s,
+            cancelledDate: a,
+            doneDate: o,
+            description: newDescription,
+        })
+    );
+}
+shiftReminderField(t, e) {
+    return t.replace(/\[reminder:: *(\d{4}-\d{2}-\d{2})(T\d{2}:\d{2})?\]/, (r, i, s) => {
+        let a = window.moment(i, "YYYY-MM-DD").add(e, "days").format("YYYY-MM-DD");
+        return `[reminder:: ${a}${s || ""}]`;
+    });
+}
+```
+
+`deltaDays` is derived from how much `scheduled` actually moved (new minus original, in whole days) — not from the recurrence rule text — so it stays correct for any interval (daily, every-N-days, weekly, etc.), not just `every day`. If the task has no `scheduled` date, or the description has no `[reminder:: ...]` field, nothing is touched (safe no-op).
+
+**Caveat:** only the first `[reminder:: ...]` match in the description is shifted (a task is not expected to carry more than one). `start` is now permanently decoupled from the recurrence interval — if a task genuinely needs `start` to slide forward too (not the case for any current recurring task in this vault), this fix would need revisiting.

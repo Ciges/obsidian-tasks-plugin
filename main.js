@@ -13609,13 +13609,8 @@ var li,
             }
             next(t) {
                 if (this.referenceDate === null) return new n({ startDate: null, scheduledDate: null, dueDate: null });
-                let e = this.startDate !== null,
-                    r = this.dueDate !== null,
-                    i = e || r,
-                    { removeScheduledDateOnRecurrence: s } = X(),
-                    a = s && i,
-                    o = this.nextOccurrenceDate(this.startDate, t),
-                    l = a ? null : this.nextOccurrenceDate(this.scheduledDate, t),
+                let o = this.startDate,
+                    l = this.scheduledDate !== null ? window.moment(t) : null,
                     u = this.nextOccurrenceDate(this.dueDate, t);
                 return new n({ startDate: o, scheduledDate: l, dueDate: u });
             }
@@ -19447,7 +19442,14 @@ var ke,
                 i && (s = window.moment());
                 let a = null,
                     o = null,
-                    u = Xe.getInstance().bySymbolOrCreate(" ");
+                    u = Xe.getInstance().bySymbolOrCreate(" "),
+                    newDescription = this.description;
+                if (this.scheduledDate !== null && r.scheduledDate !== null) {
+                    let deltaDays = Math.round(
+                        window.moment(r.scheduledDate).startOf("day").diff(window.moment(this.scheduledDate).startOf("day"), "days")
+                    );
+                    deltaDays !== 0 && (newDescription = this.shiftReminderField(newDescription, deltaDays));
+                }
                 return new n(
                     pe(Y(Y({}, this), r), {
                         status: u,
@@ -19457,8 +19459,15 @@ var ke,
                         createdDate: s,
                         cancelledDate: a,
                         doneDate: o,
+                        description: newDescription,
                     })
                 );
+            }
+            shiftReminderField(t, e) {
+                return t.replace(/\[reminder:: *(\d{4}-\d{2}-\d{2})(T\d{2}:\d{2})?\]/, (r, i, s) => {
+                    let a = window.moment(i, "YYYY-MM-DD").add(e, "days").format("YYYY-MM-DD");
+                    return `[reminder:: ${a}${s || ""}]`;
+                });
             }
             toggleWithRecurrenceInUsersOrder() {
                 let e = this.toggle();
