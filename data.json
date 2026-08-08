@@ -3,7 +3,8 @@
     "tareas_de_hoy": "# Tareas con fecha de hoy (o ya pasadas) PENDIENTES\nnot done\n(tags include #task) OR (tags include #question) \n(due today) OR (scheduled today) OR (due before today) OR (scheduled before today) OR (priority is high) OR (priority is highest)\ngroup by priority",
     "tareas_de_esta_nota": "# Tareas definidas en esta nota PENDIENTES\nnot done \n(tags include #task) OR (tags include #question) \npath includes {{query.file.path}}",
     "tareas_de_esta_nota_todas": "# Tareas definidas en esta nota\n(tags include #task) OR (tags include #question)\npath includes {{query.file.path}}",
-    "tareas_de_esta_semana": "# Tareas de prioridad media de la SEMANA ACTUAL\nnot done\n(tags include #task) OR (tags include #question) \n(priority is medium) OR (scheduled this week) OR (due this week)\ngroup by happens"
+    "tareas_de_esta_semana": "# Tareas de prioridad media de la SEMANA ACTUAL\nnot done\n(tags include #task) OR (tags include #question) \n(priority is medium) OR (scheduled this week) OR (due this week)\ngroup by happens",
+    "tareas_para_ya": "# Tareas para hacer en pocas horas\nnot done\n(tags include #task) OR (tags include #question) \npriority is highest"
   },
   "uiLanguage": "es",
   "prioritySymbols": {
