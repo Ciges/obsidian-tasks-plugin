@@ -75,9 +75,16 @@
       {
         "symbol": "/",
         "name": "In Progress",
-        "nextStatusSymbol": "p",
+        "nextStatusSymbol": "*",
         "availableAsCommand": false,
         "type": "IN_PROGRESS"
+      },
+      {
+        "symbol": "*",
+        "name": "Selected",
+        "nextStatusSymbol": "p",
+        "availableAsCommand": false,
+        "type": "TODO"
       },
       {
         "symbol": "p",
